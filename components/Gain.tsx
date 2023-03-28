@@ -27,7 +27,7 @@ export default function Gain() {
 		{
 			value: 36,
 			label: '36 db',
-		}
+		},
 	];
 
 	useEffect(() => {
@@ -40,7 +40,11 @@ export default function Gain() {
 		<Grid item xs={4}>
 			<Card variant="outlined">
 				<CardHeader
-					avatar={<Avatar><IconLight /></Avatar>}
+					avatar={
+						<Avatar>
+							<IconLight />
+						</Avatar>
+					}
 					title="Gain"
 				/>
 				<CardContent>

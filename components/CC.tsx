@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import { rgbaToHsva, hsvaToRgba } from '@uiw/color-convert'
+import { rgbaToHsva, hsvaToRgba } from '@uiw/color-convert';
 import IconColor from '@mui/icons-material/ColorLens';
 import IconRestart from '@mui/icons-material/RestartAlt';
 import Slider from '@mui/material/Slider';
@@ -34,7 +34,7 @@ function hsva2rgbl(ccmax, hsva) {
 	const rgba = hsvaToRgba(hsva);
 	const f = (x: number) => ccmax * ((x - xmin) / (xmax - xmin));
 
-	return [ f(rgba.r), f(rgba.g), f(rgba.b), 0 ];
+	return [f(rgba.r), f(rgba.g), f(rgba.b), 0];
 }
 
 function hsva2rgbl_i(ccmax, hsva) {
@@ -43,10 +43,20 @@ function hsva2rgbl_i(ccmax, hsva) {
 	const rgba = hsvaToRgba(hsva);
 	const f = (x: number) => ccmax * ((x - xmin) / (xmax - xmin));
 
-	return [ f(xmax - rgba.r), f(xmax - rgba.g), f(xmax - rgba.b), 0 ];
+	return [f(xmax - rgba.r), f(xmax - rgba.g), f(xmax - rgba.b), 0];
 }
 
-function LumaSlider({ min, max, value, onChange }: { min: number, max: number, value: number, onChange: (value: number) => void }) {
+function LumaSlider({
+	min,
+	max,
+	value,
+	onChange,
+}: {
+	min: number;
+	max: number;
+	value: number;
+	onChange: (value: number) => void;
+}) {
 	const [cameraControl] = useGlobalState('camera_control');
 
 	return (
@@ -62,47 +72,38 @@ function LumaSlider({ min, max, value, onChange }: { min: number, max: number, v
 	);
 }
 
-function ColorWheel({name, min, max, value, setValue}) {
+function ColorWheel({ name, min, max, value, setValue }) {
 	const [wheelHsva, setWheelHsv] = useState(() => rgbl2hsva_i(max, value));
 	const newRGB = (v: number[], rgb: number[]) => [rgb[0], rgb[1], rgb[2], v[3]];
 	const newLuma = (v: number[], l: number) => [v[0], v[1], v[2], l];
 
 	useEffect(() => {
 		setWheelHsv(rgbl2hsva_i(max, value));
-	}, [setWheelHsv, value])
+	}, [setWheelHsv, value]);
 
 	return (
 		<Grid item xs={3}>
-			<Typography gutterBottom>
-				{name}
-			</Typography>
-			<Wheel
-				color={wheelHsva}
-				onChange={(color) => setValue(newRGB(value, hsva2rgbl_i(max, color.hsva)))}
-			/>
+			<Typography gutterBottom>{name}</Typography>
+			<Wheel color={wheelHsva} onChange={(color) => setValue(newRGB(value, hsva2rgbl_i(max, color.hsva)))} />
 			<LumaSlider min={min} max={max} value={value[3]} onChange={(v) => setValue(newLuma(value, v))} />
 		</Grid>
 	);
 }
 
-function Contrast({value, setValue}) {
+function Contrast({ value, setValue }) {
 	return (
 		<Grid item xs={3}>
-			<Typography gutterBottom>
-				Contrast
-			</Typography>
+			<Typography gutterBottom>Contrast</Typography>
 			<LumaSlider min={0} max={1} value={value[0]} onChange={(v) => setValue([v, value[1]])} />
 			<LumaSlider min={0} max={2} value={value[1]} onChange={(v) => setValue([value[0], v])} />
 		</Grid>
 	);
 }
 
-function HueSat({value, setValue}) {
+function HueSat({ value, setValue }) {
 	return (
 		<Grid item xs={3}>
-			<Typography gutterBottom>
-				Hue &amp; Sat
-			</Typography>
+			<Typography gutterBottom>Hue &amp; Sat</Typography>
 			<LumaSlider min={-1} max={1} value={value[0]} onChange={(v) => setValue([v, value[1]])} />
 			<LumaSlider min={0} max={2} value={value[1]} onChange={(v) => setValue([value[0], v])} />
 		</Grid>
@@ -132,7 +133,7 @@ export default function ColorCorrector() {
 		cameraControl && cameraControl.setCCLift(lift);
 	}, [cameraControl, lift]);
 	useEffect(() => {
-		cameraControl &&cameraControl.setCCGamma(gamma);
+		cameraControl && cameraControl.setCCGamma(gamma);
 	}, [cameraControl, gamma]);
 	useEffect(() => {
 		cameraControl && cameraControl.setCCGain(gain);
@@ -151,7 +152,11 @@ export default function ColorCorrector() {
 		<Grid item xs={16}>
 			<Card variant="outlined">
 				<CardHeader
-					avatar={<Avatar><IconColor /></Avatar>}
+					avatar={
+						<Avatar>
+							<IconColor />
+						</Avatar>
+					}
 					title="Color"
 					action={
 						<IconButton

@@ -38,11 +38,11 @@ const iconStyle: SxPropsTheme = {
 };
 
 function DeviceStatus({ wait, severity, children }: { wait?: boolean; severity: Severity; children: any }) {
-    return (
-        <CardContent>
-            <Alert severity={severity}>{children}</Alert>
-        </CardContent>
-    );
+	return (
+		<CardContent>
+			<Alert severity={severity}>{children}</Alert>
+		</CardContent>
+	);
 }
 
 function ActionButton({
@@ -168,16 +168,16 @@ function Camera(props: { children: any }) {
 					<Typography gutterBottom variant="h5" component="h2">
 						{props.children}
 					</Typography>
-                    <Box>
-                        <DeviceStatus wait={isPairing} severity={info.severity}>
-                            {info.message.split('\n').map((line, i) => (
-                                <span key={i}>
-                                    {`${line}`}
-                                    <br />
-                                </span>
-                            ))}
-                        </DeviceStatus>
-                    </Box>
+					<Box>
+						<DeviceStatus wait={isPairing} severity={info.severity}>
+							{info.message.split('\n').map((line, i) => (
+								<span key={i}>
+									{`${line}`}
+									<br />
+								</span>
+							))}
+						</DeviceStatus>
+					</Box>
 				</CardContent>
 				<CardActions>
 					<ActionButton wait={isPairing} disabled={!btAvailable} onClick={scanDevices}>

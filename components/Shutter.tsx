@@ -27,7 +27,7 @@ export default function Shutter() {
 		{
 			value: 360,
 			label: '360 deg',
-		}
+		},
 	];
 
 	useEffect(() => {
@@ -40,7 +40,11 @@ export default function Shutter() {
 		<Grid item xs={4}>
 			<Card variant="outlined">
 				<CardHeader
-					avatar={<Avatar><IconShutterSpeed /></Avatar>}
+					avatar={
+						<Avatar>
+							<IconShutterSpeed />
+						</Avatar>
+					}
 					title="Shutter Angle"
 				/>
 				<CardContent>

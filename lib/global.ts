@@ -30,8 +30,7 @@ const initialState: GlobalState = {
 
 const { useGlobalState: _useGlobalState, getGlobalState, setGlobalState } = createGlobalState(initialState);
 
-type ConfigKey =
-	| 'gain';
+type ConfigKey = 'gain';
 
 function useGlobalState(key: keyof GlobalState) {
 	const [value, setValue] = _useGlobalState(key);

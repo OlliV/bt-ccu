@@ -8,7 +8,7 @@ const CAMERA_STATUS_CHARACTERISRIC = '7fe8691d-95dc-4fc5-8abd-ca74339b51b9';
 
 type Rgbl = [number, number, number, number];
 
-export const BCSParam: {[key: string]: [number, number]} = {
+export const BCSParam: { [key: string]: [number, number] } = {
 	Aperture: [0, 2],
 	ManualWB: [1, 2],
 	ShutterAngle: [1, 11],
@@ -19,7 +19,7 @@ export const BCSParam: {[key: string]: [number, number]} = {
 
 function toFixed16(value: number) {
 	const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-	const fixed16 = Math.round(clamp(-16.0, (15 + 2047 / 2048), value) * 2048) & 0xffff;
+	const fixed16 = Math.round(clamp(-16.0, 15 + 2047 / 2048, value) * 2048) & 0xffff;
 
 	return fixed16;
 }
@@ -142,7 +142,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 
 	const setCCLift = async (rgbl: Rgbl) => {
 		return setCCrgbl(0, rgbl);
-	}
+	};
 
 	const setCCGamma = async (rgbl: Rgbl) => {
 		return setCCrgbl(1, rgbl);
@@ -226,11 +226,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		// @ts-ignore
 		const value = event.target.value;
 
-		const [id, cat, par] = [
-			value.getUint8(0),
-			value.getUint8(4),
-			value.getUint8(5),
-		];
+		const [id, cat, par] = [value.getUint8(0), value.getUint8(4), value.getUint8(5)];
 
 		console.log(id, cat, par);
 		if (id != 255) {
@@ -249,7 +245,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		if (comp(BCSParam.Aperture, cat, par)) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;
-			const aperture = Math.sqrt(Math.pow(2, (low + high / 2048)));
+			const aperture = Math.sqrt(Math.pow(2, low + high / 2048));
 			parsed = aperture;
 		} else if (comp(BCSParam.ManualWB, cat, par)) {
 			const wbL = value.getUint8(8);
@@ -262,13 +258,19 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 
 			parsed = [whiteBalance, tint];
 		} else if (comp(BCSParam.ShutterAngle, cat, par)) {
-			parsed = value.getUint8(8) + value.getUint8(9) << 8 + value.getUint8(10) << 16 + value.getUint8(11) << 24;
+			parsed =
+				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
+				24;
 		} else if (comp(BCSParam.ShutterSpeed, cat, par)) {
-			parsed = value.getUint8(8) + value.getUint8(9) << 8 + value.getUint8(10) << 16 + value.getUint8(11) << 24;
+			parsed =
+				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
+				24;
 		} else if (comp(BCSParam.Gain, cat, par)) {
 			parsed = value.getUint8(8);
 		} else if (comp(BCSParam.ISO, cat, par)) {
-			parsed = value.getUint8(8) + value.getUint8(9) << 8 + value.getUint8(10) << 16 + value.getUint8(11) << 24;
+			parsed =
+				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
+				24;
 		}
 
 		for (const cb of list) {

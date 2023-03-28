@@ -31,7 +31,7 @@ export default function WB() {
 		{
 			value: 10000,
 			label: '10000 K',
-		}
+		},
 	];
 	const tintMarks = [
 		{
@@ -45,7 +45,7 @@ export default function WB() {
 		{
 			value: 50,
 			label: '50',
-		}
+		},
 	];
 
 	useEffect(() => {
@@ -62,7 +62,11 @@ export default function WB() {
 		<Grid item xs={8}>
 			<Card variant="outlined">
 				<CardHeader
-					avatar={<Avatar><IconBulb /></Avatar>}
+					avatar={
+						<Avatar>
+							<IconBulb />
+						</Avatar>
+					}
 					title="White Balance"
 					action={
 						<IconButton
@@ -79,9 +83,7 @@ export default function WB() {
 				<CardContent>
 					<Grid container spacing={6}>
 						<Grid item xs={7}>
-							<Typography gutterBottom>
-								Color Temp
-							</Typography>
+							<Typography gutterBottom>Color Temp</Typography>
 							<Slider
 								value={wb[0]}
 								disabled={!cameraControl}
@@ -95,9 +97,7 @@ export default function WB() {
 							/>
 						</Grid>
 						<Grid item xs={5}>
-							<Typography gutterBottom>
-								Tint
-							</Typography>
+							<Typography gutterBottom>Tint</Typography>
 							<Slider
 								value={wb[1]}
 								disabled={!cameraControl}

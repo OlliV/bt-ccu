@@ -23,7 +23,7 @@ export default function Aperture() {
 		{
 			value: 1,
 			label: 'C',
-		}
+		},
 	];
 
 	useEffect(() => {
@@ -36,7 +36,11 @@ export default function Aperture() {
 		<Grid item xs={4}>
 			<Card variant="outlined">
 				<CardHeader
-					avatar={<Avatar><IconAperture /></Avatar>}
+					avatar={
+						<Avatar>
+							<IconAperture />
+						</Avatar>
+					}
 					title="Aperture"
 				/>
 				<CardContent>

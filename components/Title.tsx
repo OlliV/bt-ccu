@@ -53,22 +53,16 @@ function Setup() {
 
 	return (
 		<Box>
-			<IconButton
-				onClick={openSettings}
-				size="large"
-				aria-label="open settings"
-				color="inherit"
-			>
-			<IconSettings />
-		</IconButton>
+			<IconButton onClick={openSettings} size="large" aria-label="open settings" color="inherit">
+				<IconSettings />
+			</IconButton>
 		</Box>
 	);
 }
 
 function useNotifications(): [Notification[], (notification: Notification) => void] {
 	const [clearedNotifications, setClearedNotifications] = useState<string[]>([]);
-	const notifications: Notification[] = [
-	].filter(({ text }) => !clearedNotifications.includes(text));
+	const notifications: Notification[] = [].filter(({ text }) => !clearedNotifications.includes(text));
 	const clearNotification = (notification: Notification) =>
 		setClearedNotifications([...clearedNotifications, notification.text]);
 
