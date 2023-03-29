@@ -4,6 +4,8 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import IconZoomIn from '@mui/icons-material/ZoomInMap';
+import IconZoomOut from '@mui/icons-material/ZoomOutMap';
 import { rgbaToHsva, hsvaToRgba } from '@uiw/color-convert';
 import IconColor from '@mui/icons-material/ColorLens';
 import IconRestart from '@mui/icons-material/RestartAlt';
@@ -18,6 +20,23 @@ const defaults = {
 	gamma: [0, 0, 0, 0],
 	gain: [1, 1, 1, 1],
 	offset: [0, 0, 0, 0],
+	contrast: [0.5, 1],
+	hueSat: [0, 1],
+};
+
+const wheelRanges = {
+	limited: {
+		lift: [-0.5, 0.5],
+		gamma: [-1, 1],
+		gain: [0.2, 1.5],
+		offset: [-8, 8],
+	},
+	full: {
+		lift: [-2, 2],
+		gamma: [-4, 4],
+		gain: [0, 16],
+		offset: [-8, 8],
+	},
 };
 
 function rgbl2hsva_i(ccmax, [r, g, b, l]: number[]) {
@@ -72,7 +91,8 @@ function LumaSlider({
 	);
 }
 
-function ColorWheel({ name, min, max, value, setValue }) {
+function ColorWheel({ name, range, value, setValue }) {
+	const [min, max] = range;
 	const [wheelHsva, setWheelHsv] = useState(() => rgbl2hsva_i(max, value));
 	const newRGB = (v: number[], rgb: number[]) => [rgb[0], rgb[1], rgb[2], v[3]];
 	const newLuma = (v: number[], l: number) => [v[0], v[1], v[2], l];
@@ -117,16 +137,18 @@ export default function ColorCorrector() {
 	const [gamma, setGamma] = useState(defaults.gamma);
 	const [gain, setGain] = useState(defaults.gain);
 	const [offset, setOffset] = useState(defaults.offset);
-	const [contrast, setContrast] = useState([0.5, 1]);
-	const [hueSat, setHueSat] = useState([0, 1]);
+	const [contrast, setContrast] = useState(defaults.contrast);
+	const [hueSat, setHueSat] = useState(defaults.hueSat);
+	const [range, setRange] = useState<'limited' | 'full'>('limited');
 
+	const toggleRange = () => setRange(range == 'limited' ? 'full' : 'limited');
 	const resetCC = () => {
 		setLift(defaults.lift);
 		setGamma(defaults.gamma);
 		setGain(defaults.gain);
 		setOffset(defaults.offset);
-		setContrast([0, 0]);
-		setHueSat([0, 0]);
+		setContrast(defaults.contrast);
+		setHueSat(defaults.hueSat);
 		cameraControl.resetCC();
 	};
 
@@ -160,23 +182,34 @@ export default function ColorCorrector() {
 					}
 					title="Color"
 					action={
-						<IconButton
-							disabled={!cameraControl}
-							onClick={resetCC}
-							size="large"
-							aria-label="reset CC"
-							color="inherit"
-						>
-							<IconRestart />
-						</IconButton>
+						<div>
+							<IconButton
+								disabled={!cameraControl}
+								onClick={toggleRange}
+								size="large"
+								aria-label="Range"
+								color="inherit"
+							>
+								{range == 'limited' ? <IconZoomOut /> : <IconZoomIn />}
+							</IconButton>
+							<IconButton
+								disabled={!cameraControl}
+								onClick={resetCC}
+								size="large"
+								aria-label="reset CC"
+								color="inherit"
+							>
+								<IconRestart />
+							</IconButton>
+						</div>
 					}
 				/>
 				<CardContent>
 					<Grid container spacing={2}>
-						<ColorWheel min={-2} max={2} name="Lift" value={lift} setValue={setLift} />
-						<ColorWheel min={-4} max={4} name="Gamma" value={gamma} setValue={setGamma} />
-						<ColorWheel min={0} max={16} name="Gain" value={gain} setValue={setGain} />
-						<ColorWheel min={-8} max={8} name="Offset" value={offset} setValue={setOffset} />
+						<ColorWheel range={wheelRanges[range].lift} name="Lift" value={lift} setValue={setLift} />
+						<ColorWheel range={wheelRanges[range].gamma} name="Gamma" value={gamma} setValue={setGamma} />
+						<ColorWheel range={wheelRanges[range].gain} name="Gain" value={gain} setValue={setGain} />
+						<ColorWheel range={wheelRanges[range].offset} name="Offset" value={offset} setValue={setOffset} />
 					</Grid>
 					<Grid container spacing={2}>
 						<Contrast value={contrast} setValue={setContrast} />
