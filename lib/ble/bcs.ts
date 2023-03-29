@@ -49,7 +49,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 	const rxCharacteristic = await service.getCharacteristic(CAMERA_CONTROL_CHARACTERISTIC_RX);
 	// TODO timecode
 	const cameraStatusCharacteristic = await service.getCharacteristic(CAMERA_STATUS_CHARACTERISRIC);
-	const paramListeners: { [key: string]: Array<(value: number | string | undefined | number[]) => void> } = {};
+	const paramListeners: { [key: string]: Array<(value: any) => void> } = {};
 	const sendBufs: Map<string, ArrayBuffer> = new Map();
 	let sendTim: ReturnType<typeof setTimeout> | null = null;
 
@@ -270,7 +270,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		await txCharacteristic.writeValue(buf);
 	};
 
-	const addParamListener = ([cat, par]: [number, number], cb: (value: number) => void) => {
+	const addParamListener = ([cat, par]: [number, number], cb: (value: any) => void) => {
 		const name = `${cat}.${par}`;
 
 		if (!paramListeners[name]) {
@@ -279,7 +279,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		paramListeners[name].push(cb);
 	};
 
-	const removeParamListener = (cat: number, par: number, cb: (value: number) => void) => {
+	const removeParamListener = (cat: number, par: number, cb: (value: any) => void) => {
 		const name = `${cat}.${par}`;
 		const i = paramListeners[name] ? paramListeners[name].indexOf(cb) : -1;
 		if (i > -1) {
