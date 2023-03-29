@@ -83,7 +83,7 @@ function SpeedSlider() {
 	const fps = recFormat.sensorFps || 25;
 	const speeds = getSpeeds(fps);
 	const valueLabelFormat = (v: number) => `1/${speeds[v]}`
-	const marks = speeds.map((v: number, i: number) => ({ value: i, label: '' }));
+	const marks = speeds.map((v: number, i: number) => ({ value: i, label: ' ' }));
 
 	useEffect(() => {
 		if (cameraControl) {
