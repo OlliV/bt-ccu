@@ -322,7 +322,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			return;
 		}
 
-		let parsed: undefined | number | string | number[] | { sensorFps: number, mRate: boolean };
+		let parsed: undefined | number | string | number[] | { sensorFps: number; mRate: boolean };
 
 		const comp = (param: [number, number], cat: number, par: number) => param[0] == cat && param[1] == par;
 		if (comp(BCSParam.Aperture, cat, par) || comp(BCSParam.ApertureNorm, cat, par)) {

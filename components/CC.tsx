@@ -27,7 +27,7 @@ const defaults: { [key: string]: Rgbl } = {
 const defaultContrast = [0.5, 1];
 const defaultHueSat = [0, 1];
 
-const wheelRanges: { [key: string]: { [key:string]: [number, number]} } = {
+const wheelRanges: { [key: string]: { [key: string]: [number, number] } } = {
 	limited: {
 		lift: [-0.5, 0.5],
 		gamma: [-1, 1],
@@ -75,7 +75,7 @@ function LumaSlider({
 	value,
 	onChange,
 }: {
-	disabled?: boolean,
+	disabled?: boolean;
 	min: number;
 	max: number;
 	value: number;
@@ -94,7 +94,19 @@ function LumaSlider({
 	);
 }
 
-function ColorWheel({ disabled, name, range, value, setValue }: { disabled?: boolean, name: string, range: [number, number], value: Rgbl, setValue: (v: Rgbl) => void }) {
+function ColorWheel({
+	disabled,
+	name,
+	range,
+	value,
+	setValue,
+}: {
+	disabled?: boolean;
+	name: string;
+	range: [number, number];
+	value: Rgbl;
+	setValue: (v: Rgbl) => void;
+}) {
 	const [min, max] = range;
 	const [wheelHsva, setWheelHsv] = useState(() => rgbl2hsva_i(max, value));
 	const newRGB = (v: Rgbl, rgb: Rgbl): Rgbl => [rgb[0], rgb[1], rgb[2], v[3]];
@@ -110,7 +122,7 @@ function ColorWheel({ disabled, name, range, value, setValue }: { disabled?: boo
 	return (
 		<Grid item xs={3}>
 			<Typography gutterBottom>{name}</Typography>
-			<Wheel color={disabled ? {h: 0, s: 0, v: 0, a: 0} : wheelHsva} onChange={onChangeColor} />
+			<Wheel color={disabled ? { h: 0, s: 0, v: 0, a: 0 } : wheelHsva} onChange={onChangeColor} />
 			<LumaSlider disabled={disabled} min={min} max={max} value={value[3]} onChange={onChangeLuma} />
 		</Grid>
 	);
@@ -120,8 +132,20 @@ function Contrast({ disabled, value, setValue }) {
 	return (
 		<Grid item xs={3}>
 			<Typography gutterBottom>Contrast</Typography>
-			<LumaSlider disabled={disabled} min={0} max={1} value={value[0]} onChange={(v) => setValue([v, value[1]])} />
-			<LumaSlider disabled={disabled} min={0} max={2} value={value[1]} onChange={(v) => setValue([value[0], v])} />
+			<LumaSlider
+				disabled={disabled}
+				min={0}
+				max={1}
+				value={value[0]}
+				onChange={(v) => setValue([v, value[1]])}
+			/>
+			<LumaSlider
+				disabled={disabled}
+				min={0}
+				max={2}
+				value={value[1]}
+				onChange={(v) => setValue([value[0], v])}
+			/>
 		</Grid>
 	);
 }
@@ -130,8 +154,20 @@ function HueSat({ disabled, value, setValue }) {
 	return (
 		<Grid item xs={3}>
 			<Typography gutterBottom>Hue &amp; Sat</Typography>
-			<LumaSlider disabled={disabled} min={-1} max={1} value={value[0]} onChange={(v) => setValue([v, value[1]])} />
-			<LumaSlider disabled={disabled} min={0} max={2} value={value[1]} onChange={(v) => setValue([value[0], v])} />
+			<LumaSlider
+				disabled={disabled}
+				min={-1}
+				max={1}
+				value={value[0]}
+				onChange={(v) => setValue([v, value[1]])}
+			/>
+			<LumaSlider
+				disabled={disabled}
+				min={0}
+				max={2}
+				value={value[1]}
+				onChange={(v) => setValue([value[0], v])}
+			/>
 		</Grid>
 	);
 }
@@ -206,7 +242,7 @@ export default function ColorCorrector() {
 								color="inherit"
 							>
 								<IconColorBars />
-						    </IconButton>
+							</IconButton>
 							<IconButton
 								disabled={!cameraControl}
 								onClick={toggleRange}
@@ -230,9 +266,27 @@ export default function ColorCorrector() {
 				/>
 				<CardContent>
 					<Grid container spacing={2}>
-						<ColorWheel disabled={!cameraControl} range={wheelRanges[range].lift} name="Lift" value={lift} setValue={setLift} />
-						<ColorWheel disabled={!cameraControl} range={wheelRanges[range].gamma} name="Gamma" value={gamma} setValue={setGamma} />
-						<ColorWheel disabled={!cameraControl} range={wheelRanges[range].gain} name="Gain" value={gain} setValue={setGain} />
+						<ColorWheel
+							disabled={!cameraControl}
+							range={wheelRanges[range].lift}
+							name="Lift"
+							value={lift}
+							setValue={setLift}
+						/>
+						<ColorWheel
+							disabled={!cameraControl}
+							range={wheelRanges[range].gamma}
+							name="Gamma"
+							value={gamma}
+							setValue={setGamma}
+						/>
+						<ColorWheel
+							disabled={!cameraControl}
+							range={wheelRanges[range].gain}
+							name="Gain"
+							value={gain}
+							setValue={setGain}
+						/>
 						<ColorWheel
 							disabled={!cameraControl}
 							range={wheelRanges[range].offset}

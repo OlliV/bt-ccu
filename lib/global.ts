@@ -15,7 +15,7 @@ export type GlobalState = {
 	// Reported values
 	res_aperture: number;
 	res_aperture_norm: number;
-	res_recording_format: { sensorFps: number, mRate: boolean };
+	res_recording_format: { sensorFps: number; mRate: boolean };
 	res_shutter_angle: number;
 	res_shutter_speed: number;
 	res_wb: [number, number]; // temp, tint
@@ -75,4 +75,4 @@ function useGlobalState(key: keyof GlobalState) {
 //	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config));
 //}
 
-export { useGlobalState, getGlobalState, setGlobalState, /* saveConfig */ };
+export { useGlobalState, getGlobalState, setGlobalState /* saveConfig */ };
