@@ -78,6 +78,7 @@ function Camera(props: { children: any }) {
 	const [, setCameraControl] = useGlobalState('camera_control');
 	const [, setRecFormat] = useGlobalState('res_recording_format');
 	const [, setAperture] = useGlobalState('res_aperture');
+	const [, setApertureNorm] = useGlobalState('res_aperture_norm');
 	const [, setShutterAngle] = useGlobalState('res_shutter_angle');
 	const [, setShutterSpeed] = useGlobalState('res_shutter_speed');
 	const [, setManualWB] = useGlobalState('res_wb');
@@ -124,6 +125,7 @@ function Camera(props: { children: any }) {
 								const controller = await createBcs(server);
 								await controller.bond();
 								controller.addParamListener(BCSParam.Aperture, setAperture);
+								controller.addParamListener(BCSParam.ApertureNorm, setApertureNorm);
 								controller.addParamListener(BCSParam.ShutterAngle, setShutterAngle);
 								controller.addParamListener(BCSParam.ShutterSpeed, setShutterSpeed);
 								controller.addParamListener(BCSParam.RecFormat, setRecFormat);

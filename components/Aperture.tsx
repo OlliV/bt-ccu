@@ -9,8 +9,8 @@ import MuiInput from '@mui/material/OutlinedInput';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
-import { useGlobalState } from '../lib/global';
+import { use, useEffect, useState } from 'react';
+import { getGlobalState, useGlobalState } from '../lib/global';
 import { BCSParam } from '../lib/ble/bcs';
 
 function valueText(value: number) {
@@ -36,6 +36,19 @@ export default function Aperture() {
 		},
 	];
 
+	/*
+	 * Get the initial slider position
+	 */
+	useEffect(() => {
+		const tid = setTimeout(() => {
+			setAperture(() => getGlobalState('res_aperture_norm'));
+		}, 1000);
+		return () => clearTimeout(tid);
+	}, [cameraControl]);
+
+	/*
+	 * Get f-number
+	 */
 	useEffect(() => {
 		const cb = (av: number) => {
 			setApertureF(Math.sqrt(Math.pow(2, av)));
