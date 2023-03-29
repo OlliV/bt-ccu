@@ -333,23 +333,17 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 
 			parsed = [temp, tint];
 		} else if (comp(BCSParam.ShutterAngle, cat, par)) {
-			parsed = value.getUint8(8) |
-			    value.getUint8(9) << 8 |
-				value.getUint8(10) << 16 |
-				value.getUint8(11) << 24;
+			parsed =
+				value.getUint8(8) | (value.getUint8(9) << 8) | (value.getUint8(10) << 16) | (value.getUint8(11) << 24);
 			parsed /= 100;
 		} else if (comp(BCSParam.ShutterSpeed, cat, par)) {
-			parsed = value.getUint8(8) |
-			    value.getUint8(9) << 8 |
-				value.getUint8(10) << 16 |
-				value.getUint8(11) << 24;
+			parsed =
+				value.getUint8(8) | (value.getUint8(9) << 8) | (value.getUint8(10) << 16) | (value.getUint8(11) << 24);
 		} else if (comp(BCSParam.Gain, cat, par)) {
 			parsed = value.getUint8(8);
 		} else if (comp(BCSParam.ISO, cat, par)) {
-			parsed = value.getUint8(8) |
-			    value.getUint8(9) << 8 |
-				value.getUint8(10) << 16 |
-				value.getUint8(11) << 24;
+			parsed =
+				value.getUint8(8) | (value.getUint8(9) << 8) | (value.getUint8(10) << 16) | (value.getUint8(11) << 24);
 		} else if (comp(BCSParam.NDFilter, cat, par)) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;

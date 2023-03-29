@@ -19,7 +19,7 @@ import Slider from '@mui/material/Slider';
 import { useEffect, useState } from 'react';
 import { useGlobalState } from '../lib/global';
 import { BCSParam } from '../lib/ble/bcs';
-import {IconButton} from '@mui/material';
+import { IconButton } from '@mui/material';
 
 function valueText(value: number) {
 	return `${value} dB`;
@@ -30,32 +30,32 @@ function NDIcon() {
 	const [nd] = useGlobalState('res_nd_filter');
 
 	if (nd <= 0 || isNaN(nd)) {
-		return (<Filter0Icon />);
+		return <Filter0Icon />;
 	}
 
 	switch (nd) {
 		case 0:
-		return <Filter0Icon/>;
+			return <Filter0Icon />;
 		case 1:
-		return <Filter1Icon/>;
+			return <Filter1Icon />;
 		case 2:
-		return <Filter2Icon/>;
+			return <Filter2Icon />;
 		case 3:
-		return <Filter3Icon/>;
+			return <Filter3Icon />;
 		case 4:
-		return <Filter4Icon/>;
+			return <Filter4Icon />;
 		case 5:
-		return <Filter5Icon/>;
+			return <Filter5Icon />;
 		case 6:
-		return <Filter6Icon/>;
+			return <Filter6Icon />;
 		case 7:
-		return <Filter7Icon/>;
+			return <Filter7Icon />;
 		case 8:
-		return <Filter8Icon/>;
+			return <Filter8Icon />;
 		case 9:
-		return <Filter9Icon/>;
+			return <Filter9Icon />;
 		default:
-		return <Filter9PlusIcon />;
+			return <Filter9PlusIcon />;
 	}
 }
 
@@ -188,14 +188,9 @@ export default function Shutter() {
 					}
 					title="Shutter"
 					action={
-							<IconButton
-								disabled={true}
-								size="large"
-								aria-label="ND Filter"
-								color="inherit"
-							>
-								<NDIcon />
-							</IconButton>
+						<IconButton disabled={true} size="large" aria-label="ND Filter" color="inherit">
+							<NDIcon />
+						</IconButton>
 					}
 				/>
 				<CardContent>{sType == 'angle' ? <AngleSlider /> : <SpeedSlider />}</CardContent>
