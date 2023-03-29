@@ -6,7 +6,7 @@ const CAMERA_CONTROL_CHARACTERISTIC_RX = 'b864e140-76a0-416a-bf30-5876504537d9';
 const CAMERA_TIMECODE_CHARACTERISTIC = '6d8f2110-86f1-41bf-9afb-451d87e976c8';
 const CAMERA_STATUS_CHARACTERISRIC = '7fe8691d-95dc-4fc5-8abd-ca74339b51b9';
 
-type Rgbl = [number, number, number, number];
+export type Rgbl = [number, number, number, number];
 
 const BCSDataType: { [key: string]: number } = {
 	void_t: 0,
@@ -20,6 +20,7 @@ const BCSDataType: { [key: string]: number } = {
 
 export const BCSParam: { [key: string]: [number, number] } = {
 	Aperture: [0, 2],
+	ApertureNorm: [0, 3],
 	ManualWB: [1, 2],
 	AutoWB: [1, 3],
 	RecFormat: [1, 9],
@@ -88,8 +89,8 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		const msg = new DataView(buf);
 
 		setSendHeader(msg, 255, 0, 6);
-		msg.setUint8(4, 0); // cat: lens
-		msg.setUint8(5, 3); // par: aperture (normalized)
+		msg.setUint8(4, BCSParam.ApertureNorm[0]); // cat
+		msg.setUint8(5, BCSParam.ApertureNorm[1]); // par
 		msg.setUint8(6, BCSDataType.fixed16); // type
 		msg.setUint8(7, 0); // op: assign
 		msg.setUint8(8, vfix & 0xff);
@@ -180,6 +181,20 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		msg.setUint8(5, BCSParam.AutoWB[1]); // par
 		msg.setUint8(6, BCSDataType.void_t); // type
 		msg.setUint8(7, 0); // op: assign
+
+		deferSend(buf);
+	};
+
+	const setColorBars = (timeout: number) => {
+		const buf = new ArrayBuffer(12);
+		const msg = new DataView(buf);
+
+		setSendHeader(msg, 255, 0, 5);
+		msg.setUint8(4, 4); // cat: display
+		msg.setUint8(5, 4); // par: color bar enable
+		msg.setUint8(6, BCSDataType.int8_t); // type
+		msg.setUint8(7, 0); // op: assign
+		msg.setUint8(8, timeout);
 
 		deferSend(buf);
 	};
@@ -292,9 +307,11 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		// @ts-ignore
 		const value = event.target.value;
 
-		const [id, cat, par] = [value.getUint8(0), value.getUint8(4), value.getUint8(5)];
+		const [id, cmd, cat, par] = [value.getUint8(0), value.getUint8(2), value.getUint8(4), value.getUint8(5)];
 
-		if (id != 255) {
+		// cat: 9 == status
+		// cat: 12 == metadata
+		if (id != 255 || cmd != 0 || cat == 9 || cat > 11) {
 			return;
 		}
 		console.log(`got event: ${cat}.${par}`);
@@ -305,17 +322,18 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			return;
 		}
 
-		let parsed: undefined | number | string | number[] | { sensorFps: number };
+		let parsed: undefined | number | string | number[] | { sensorFps: number, mRate: boolean };
 
 		const comp = (param: [number, number], cat: number, par: number) => param[0] == cat && param[1] == par;
-		if (comp(BCSParam.Aperture, cat, par)) {
+		if (comp(BCSParam.Aperture, cat, par) || comp(BCSParam.ApertureNorm, cat, par)) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;
 			parsed = (low + high) / 2048;
 		} else if (comp(BCSParam.RecFormat, cat, par)) {
 			const sensorFps = value.getUint8(10) | (value.getUint8(11) << 8);
+			const flags = value.getUint8(16) << 16;
 
-			parsed = { sensorFps };
+			parsed = { sensorFps, mRate: !!(flags & 0x1) };
 		} else if (comp(BCSParam.ManualWB, cat, par)) {
 			const wbL = value.getUint8(8);
 			const wbH = value.getUint8(9) << 8;
@@ -364,6 +382,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		setGain,
 		setWB,
 		setAutoWB,
+		setColorBars,
 		setCCLift,
 		setCCGamma,
 		setCCGain,
