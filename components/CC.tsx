@@ -81,6 +81,7 @@ function ColorWheel({ name, min, max, value, setValue }) {
 		setWheelHsv(rgbl2hsva_i(max, value));
 	}, [setWheelHsv, value]);
 
+	// TODO Wide range button and cap the max normally
 	return (
 		<Grid item xs={3}>
 			<Typography gutterBottom>{name}</Typography>

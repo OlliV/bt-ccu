@@ -216,7 +216,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 
 	const removeParamListener = (cat: number, par: number, cb: (value: number) => void) => {
 		const name = `${cat}.${par}`;
-		const i = paramListeners[name].indexOf(cb);
+		const i = paramListeners[name] ? paramListeners[name].indexOf(cb) : -1;
 		if (i > -1) {
 			paramListeners[name].splice(i, 1);
 		}
@@ -245,8 +245,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		if (comp(BCSParam.Aperture, cat, par)) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;
-			const aperture = Math.sqrt(Math.pow(2, low + high / 2048));
-			parsed = aperture;
+			parsed = (low + high) / 2048;
 		} else if (comp(BCSParam.ManualWB, cat, par)) {
 			const wbL = value.getUint8(8);
 			const wbH = value.getUint8(9) << 8;

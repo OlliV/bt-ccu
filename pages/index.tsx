@@ -18,10 +18,14 @@ export default function Home() {
 				<p>&nbsp;</p>
 
 				<Grid container direction="row" alignItems="center" spacing={2}>
-					<Gain />
-					<ShutterAngle />
+					<Grid item xs={9}>
+						<Grid container direction="row" spacing={2}>
+							<Gain />
+							<ShutterAngle />
+							<WB />
+						</Grid>
+					</Grid>
 					<Aperture />
-					<WB />
 					<CC />
 				</Grid>
 			</Box>
