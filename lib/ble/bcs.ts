@@ -21,6 +21,7 @@ const BCSDataType: { [key: string]: number } = {
 export const BCSParam: { [key: string]: [number, number] } = {
 	Aperture: [0, 2],
 	ManualWB: [1, 2],
+	AutoWB: [1, 3],
 	RecFormat: [1, 9],
 	ShutterAngle: [1, 11],
 	ShutterSpeed: [1, 12],
@@ -157,14 +158,27 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		const tint = Math.round(value[1]) | 0;
 
 		setSendHeader(msg, 255, 0, 8);
-		msg.setUint8(4, 1); // cat: video
-		msg.setUint8(5, 2); // par: manual wb
+		msg.setUint8(4, BCSParam.ManualWB[0]); // cat
+		msg.setUint8(5, BCSParam.ManualWB[1]); // par
 		msg.setUint8(6, BCSDataType.int16_t); // type
 		msg.setUint8(7, 0); // op: assign
 		msg.setUint8(8, temp & 0xff);
 		msg.setUint8(9, temp >> 8);
 		msg.setUint8(10, tint && 0xff);
 		msg.setUint8(11, tint >> 8);
+
+		deferSend(buf);
+	};
+
+	const setAutoWB = () => {
+		const buf = new ArrayBuffer(8);
+		const msg = new DataView(buf);
+
+		setSendHeader(msg, 255, 0, 4);
+		msg.setUint8(4, BCSParam.AutoWB[0]); // cat
+		msg.setUint8(5, BCSParam.AutoWB[1]); // par
+		msg.setUint8(6, BCSDataType.void_t); // type
+		msg.setUint8(7, 0); // op: assign
 
 		deferSend(buf);
 	};
@@ -282,6 +296,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		if (id != 255) {
 			return;
 		}
+		console.log(`got event: ${cat}.${par}`);
 
 		const name = `${cat}.${par}`;
 		const list = paramListeners[name];
@@ -302,19 +317,25 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			const high = value.getUint8(9) << 8;
 			parsed = (low + high) / 2048;
 		} else if (comp(BCSParam.RecFormat, cat, par)) {
-			const sensorFps = value.getUint8(10) || value.getUint8(11) << 8;
+			const sensorFps = value.getUint8(10) | value.getUint8(11) << 8;
 
 			parsed = { sensorFps };
 		} else if (comp(BCSParam.ManualWB, cat, par)) {
 			const wbL = value.getUint8(8);
 			const wbH = value.getUint8(9) << 8;
-			const whiteBalance = wbL + wbH;
+			const temp = wbL + wbH;
 
 			const tintL = value.getUint8(10);
 			const tintH = value.getUint8(11) << 8;
 			const tint = tintL + tintH;
 
-			parsed = [whiteBalance, tint];
+			if (temp > 10000 || tint > 50 || tint < -50) {
+				// Sometimes the camera returns corrupted
+				// WB after an auto WB op.
+				return;
+			}
+
+			parsed = [temp, tint];
 		} else if (comp(BCSParam.ShutterAngle, cat, par)) {
 			parsed =
 				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
@@ -344,6 +365,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		setShutterSpeed,
 		setGain,
 		setWB,
+		setAutoWB,
 		setCCLift,
 		setCCGamma,
 		setCCGain,

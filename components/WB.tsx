@@ -3,12 +3,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
+import IconAutoWb from '@mui/icons-material/WbAuto';
 import IconBulb from '@mui/icons-material/Lightbulb';
+import IconButton from '@mui/material/IconButton';
 import IconRestart from '@mui/icons-material/RestartAlt';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
-import { useGlobalState } from '../lib/global';
+import { getGlobalState, useGlobalState } from '../lib/global';
 import { useEffect, useState } from 'react';
 
 function valueText(value: number) {
@@ -54,6 +55,15 @@ export default function WB() {
 		}
 	}, [cameraControl, wb]);
 
+	const autoWB = () => {
+		if (cameraControl) {
+			cameraControl.setAutoWB();
+			const tid = setTimeout(() => {
+				setWB(() => getGlobalState('res_wb'));
+			}, 15);
+			return () => clearTimeout(tid);
+		}
+	};
 	const resetWB = () => setWB([5600, 10]);
 	const newTemp = (oldWb, temp) => [temp, oldWb[1]];
 	const newTint = (oldWb, tint) => [oldWb[0], tint];
@@ -69,15 +79,26 @@ export default function WB() {
 					}
 					title="White Balance"
 					action={
-						<IconButton
-							disabled={!cameraControl}
-							onClick={resetWB}
-							size="large"
-							aria-label="reset CC"
-							color="inherit"
-						>
-							<IconRestart />
-						</IconButton>
+						<div>
+							<IconButton
+								disabled={!cameraControl}
+								onClick={autoWB}
+								size="large"
+								aria-label="Auto WB"
+								color="inherit"
+							>
+								<IconAutoWb />
+							</IconButton>
+							<IconButton
+								disabled={!cameraControl}
+								onClick={resetWB}
+								size="large"
+								aria-label="reset CC"
+								color="inherit"
+							>
+								<IconRestart />
+							</IconButton>
+						</div>
 					}
 				/>
 				<CardContent>

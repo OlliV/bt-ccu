@@ -14,6 +14,7 @@ export type GlobalState = {
 	gain: number;
 	// Reported values
 	res_recording_format: { sensorFps: number };
+	res_wb: [number, number]; // temp, tint
 };
 
 const LOCAL_STORAGE_KEY = 'settings';
@@ -30,6 +31,7 @@ const initialState: GlobalState = {
 	gain: 0,
 	// Reported values
 	res_recording_format: { sensorFps: NaN },
+	res_wb: [5600, 10],
 	// Load config from local storage
 	...(typeof window === 'undefined' ? {} : JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))),
 };

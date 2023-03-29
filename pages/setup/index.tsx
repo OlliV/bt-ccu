@@ -79,7 +79,7 @@ function Camera(props: { children: any }) {
 	const [, setRecFormat] = useGlobalState('res_recording_format');
 	//const [, setAperture] = useGlobalState('aperture');
 	//const [, setShutterAngle] = useGlobalState('shutter_angle');
-	//const [, setManualWB] = useGlobalState('manual_wb');
+	const [, setManualWB] = useGlobalState('res_wb');
 	//const [, setGain] = useGlobalState('gain');
 	let [info, setInfo] = useState<InfoMessage>(pairedWithMessage(btDevice));
 
@@ -122,12 +122,12 @@ function Camera(props: { children: any }) {
 								const controller = await createBcs(server);
 								await controller.bond();
 								controller.addParamListener(BCSParam.RecFormat, setRecFormat);
+								controller.addParamListener(BCSParam.ManualWB, setManualWB);
 								// TODO Unfortunately the camera also sends these messages
 								// when we control the camera. So we don't know whether it was
 								// us or the operator.
 								//controller.addParamListener(BCSParam.Aperture, setAperture);
 								//controller.addParamListener(BCSParam.ShutterAngle, setShutterAngle);
-								//controller.addParamListener(BCSParam.ManualWB, setManualWB);
 								//controller.addParamListener(BCSParam.Gain, setGain);
 								await controller.startNotifications();
 								setCameraControl(controller);
