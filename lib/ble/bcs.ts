@@ -340,7 +340,9 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			parsed =
 				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
 				24;
+			parsed /= 100;
 		} else if (comp(BCSParam.ShutterSpeed, cat, par)) {
+			console.log('goddit')
 			parsed =
 				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
 				24;

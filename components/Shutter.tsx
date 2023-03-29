@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import IconShutterSpeed from '@mui/icons-material/ShutterSpeed';
 import Slider from '@mui/material/Slider';
 import { useEffect, useState } from 'react';
-import { useGlobalState } from '../lib/global';
+import { getGlobalState, useGlobalState } from '../lib/global';
 import { BCSParam } from '../lib/ble/bcs';
 
 function valueText(value: number) {
@@ -31,6 +31,12 @@ function AngleSlider() {
 		},
 	];
 
+	useEffect(() => {
+		const tid = setTimeout(() => {
+			setShutterAngle(() => getGlobalState('res_shutter_angle'));
+		}, 500);
+		return () => clearTimeout(tid);
+	}, [cameraControl]);
 	useEffect(() => {
 		if (cameraControl) {
 			cameraControl.setShutterAngle(shutterAngle);
@@ -85,6 +91,12 @@ function SpeedSlider() {
 	const valueLabelFormat = (v: number) => `1/${speeds[v]}`
 	const marks = speeds.map((v: number, i: number) => ({ value: i, label: ' ' }));
 
+	useEffect(() => {
+		const tid = setTimeout(() => {
+			setShutterSpeed(() => getGlobalState('res_shutter_speed'));
+		}, 500);
+		return () => clearTimeout(tid);
+	}, [cameraControl]);
 	useEffect(() => {
 		if (cameraControl) {
 			cameraControl.setShutterSpeed(shutterSpeed);
