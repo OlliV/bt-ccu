@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
-import IconLight from '@mui/icons-material/LightMode';
+import IconExposure from '@mui/icons-material/Exposure';
 import Slider from '@mui/material/Slider';
 import { useGlobalState } from '../lib/global';
 import { useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ export default function Gain() {
 				<CardHeader
 					avatar={
 						<Avatar>
-							<IconLight />
+							<IconExposure />
 						</Avatar>
 					}
 					title="Gain"
