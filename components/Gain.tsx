@@ -5,8 +5,8 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import IconExposure from '@mui/icons-material/Exposure';
 import Slider from '@mui/material/Slider';
-import { useGlobalState } from '../lib/global';
-import { useEffect, useState } from 'react';
+import { getGlobalState, useGlobalState } from '../lib/global';
+import { useEffect } from 'react';
 
 function valueText(value: number) {
 	return `${value} dB`;
@@ -30,6 +30,14 @@ export default function Gain() {
 		},
 	];
 
+	useEffect(() => {
+		if (cameraControl) {
+			const tid = setTimeout(() => {
+				setGain(() => getGlobalState('res_gain'));
+			}, 500);
+			return () => clearTimeout(tid);
+		}
+	}, [cameraControl]);
 	useEffect(() => {
 		if (cameraControl && gain) {
 			cameraControl.setGain(gain);
