@@ -82,6 +82,7 @@ function Camera(props: { children: any }) {
 	const [, setShutterSpeed] = useGlobalState('res_shutter_speed');
 	const [, setManualWB] = useGlobalState('res_wb');
 	const [, setGain] = useGlobalState('res_gain');
+	const [, setNdFilter] = useGlobalState('res_nd_filter');
 	let [info, setInfo] = useState<InfoMessage>(pairedWithMessage(btDevice));
 
 	const unpairDevice = () => {
@@ -125,9 +126,10 @@ function Camera(props: { children: any }) {
 								controller.addParamListener(BCSParam.Aperture, setAperture);
 								controller.addParamListener(BCSParam.ShutterAngle, setShutterAngle);
 								controller.addParamListener(BCSParam.ShutterSpeed, setShutterSpeed);
-								controller.addParamListener(BCSParam.Gain, setGain);
 								controller.addParamListener(BCSParam.RecFormat, setRecFormat);
 								controller.addParamListener(BCSParam.ManualWB, setManualWB);
+								controller.addParamListener(BCSParam.Gain, setGain);
+								controller.addParamListener(BCSParam.NDFilter, setNdFilter);
 								await controller.startNotifications();
 								setCameraControl(controller);
 							} catch (err) {

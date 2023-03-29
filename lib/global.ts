@@ -19,6 +19,7 @@ export type GlobalState = {
 	res_shutter_speed: number;
 	res_wb: [number, number]; // temp, tint
 	res_gain: number;
+	res_nd_filter: number;
 };
 
 const LOCAL_STORAGE_KEY = 'settings';
@@ -40,6 +41,7 @@ const initialState: GlobalState = {
 	res_shutter_speed: 50,
 	res_wb: [5600, 10],
 	res_gain: 0,
+	res_nd_filter: 0,
 	// Load config from local storage
 	...(typeof window === 'undefined' ? {} : JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))),
 };

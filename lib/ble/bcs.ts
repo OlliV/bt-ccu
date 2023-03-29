@@ -27,6 +27,7 @@ export const BCSParam: { [key: string]: [number, number] } = {
 	ShutterSpeed: [1, 12],
 	Gain: [1, 13],
 	ISO: [1, 14], // Not supported by URSA Broadcast G2
+	NDFilter: [1, 16],
 };
 
 function toFixed16(value: number) {
@@ -349,6 +350,10 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			    value.getUint8(9) << 8 |
 				value.getUint8(10) << 16 |
 				value.getUint8(11) << 24;
+		} else if (comp(BCSParam.NDFilter, cat, par)) {
+			const low = value.getUint8(8);
+			const high = value.getUint8(9) << 8;
+			parsed = (low + high) / 2048;
 		}
 
 		for (const cb of list) {
