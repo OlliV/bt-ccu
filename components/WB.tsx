@@ -50,7 +50,7 @@ export default function WB() {
 
 	useEffect(() => {
 		if (cameraControl) {
-			cameraControl.setWB(wb).catch(console.error);
+			cameraControl.setWB(wb);
 		}
 	}, [cameraControl, wb]);
 

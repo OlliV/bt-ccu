@@ -18,7 +18,7 @@ function valueText(value: number) {
 }
 
 const Input = styled(MuiInput)`
-	width: 5em;
+	width: 5.5em;
 `;
 
 export default function Aperture() {
@@ -28,7 +28,7 @@ export default function Aperture() {
 	const marks = [
 		{
 			value: 0,
-			label: '0',
+			label: '-',
 		},
 		{
 			value: 1,
@@ -49,7 +49,7 @@ export default function Aperture() {
 
 	useEffect(() => {
 		if (cameraControl) {
-			cameraControl.setApertureNorm(aperture).catch(console.error);
+			cameraControl.setApertureNorm(aperture);
 		}
 	}, [cameraControl, aperture]);
 

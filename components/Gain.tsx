@@ -32,7 +32,7 @@ export default function Gain() {
 
 	useEffect(() => {
 		if (cameraControl && gain) {
-			cameraControl.setGain(gain).catch(console.error);
+			cameraControl.setGain(gain);
 		}
 	}, [cameraControl, gain]);
 

@@ -75,11 +75,12 @@ function Camera(props: { children: any }) {
 	const [pairingRequest, setPairingRequest] = useState(false);
 	const [isPairing, setIsPairing] = useState(false);
 	const [btDevice, setBtDevice] = useGlobalState('btDevice_camera') as [BtDevice, (BtDevice) => void];
-	const [cameraControl, setCameraControl] = useGlobalState('camera_control');
-	const [, setAperture] = useGlobalState('aperture');
-	const [, setShutterAngle] = useGlobalState('shutter_angle');
-	const [, setManualWB] = useGlobalState('manual_wb');
-	const [, setGain] = useGlobalState('gain');
+	const [, setCameraControl] = useGlobalState('camera_control');
+	const [, setRecFormat] = useGlobalState('res_recording_format');
+	//const [, setAperture] = useGlobalState('aperture');
+	//const [, setShutterAngle] = useGlobalState('shutter_angle');
+	//const [, setManualWB] = useGlobalState('manual_wb');
+	//const [, setGain] = useGlobalState('gain');
 	let [info, setInfo] = useState<InfoMessage>(pairedWithMessage(btDevice));
 
 	const unpairDevice = () => {
@@ -120,7 +121,7 @@ function Camera(props: { children: any }) {
 								// TODO start notifications etc
 								const controller = await createBcs(server);
 								await controller.bond();
-								await controller.startNotifications();
+								controller.addParamListener(BCSParam.RecFormat, setRecFormat);
 								// TODO Unfortunately the camera also sends these messages
 								// when we control the camera. So we don't know whether it was
 								// us or the operator.
@@ -128,6 +129,7 @@ function Camera(props: { children: any }) {
 								//controller.addParamListener(BCSParam.ShutterAngle, setShutterAngle);
 								//controller.addParamListener(BCSParam.ManualWB, setManualWB);
 								//controller.addParamListener(BCSParam.Gain, setGain);
+								await controller.startNotifications();
 								setCameraControl(controller);
 							} catch (err) {
 								setInfo({ message: `${err}`, severity: 'error' });
