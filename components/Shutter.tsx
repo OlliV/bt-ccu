@@ -64,9 +64,9 @@ const gSpeeds = {
 	24: [24, 48, 60, 96, 120, 198, 1000, 2000, 5000],
 	25: [25, 30, 50, 60, 100, 125, 200, 250, 500, 1000, 2000, 5000],
 	30: [30, 50, 60, 100, 125, 200, 250, 500, 1000, 2000, 5000],
-	50: [50, 60, 100, 125, 200, 250, 500, 1000, 2000, 5000 ],
+	50: [50, 60, 100, 125, 200, 250, 500, 1000, 2000, 5000],
 	60: [60, 100, 125, 200, 250, 500, 1000, 2000, 5000],
-}
+};
 
 function getSpeeds(fps: number) {
 	if (fps < 25) {
@@ -88,7 +88,7 @@ function SpeedSlider() {
 	const [recFormat] = useGlobalState('res_recording_format');
 	const fps = recFormat.sensorFps || 25;
 	const speeds = getSpeeds(fps);
-	const valueLabelFormat = (v: number) => `1/${speeds[v]}`
+	const valueLabelFormat = (v: number) => `1/${speeds[v]}`;
 	const marks = speeds.map((v: number, i: number) => ({ value: i, label: ' ' }));
 
 	useEffect(() => {
@@ -154,9 +154,7 @@ export default function Shutter() {
 					}
 					title="Shutter"
 				/>
-				<CardContent>
-					{sType == 'angle' ? <AngleSlider /> : <SpeedSlider />}
-				</CardContent>
+				<CardContent>{sType == 'angle' ? <AngleSlider /> : <SpeedSlider />}</CardContent>
 			</Card>
 		</Grid>
 	);

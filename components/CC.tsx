@@ -209,7 +209,12 @@ export default function ColorCorrector() {
 						<ColorWheel range={wheelRanges[range].lift} name="Lift" value={lift} setValue={setLift} />
 						<ColorWheel range={wheelRanges[range].gamma} name="Gamma" value={gamma} setValue={setGamma} />
 						<ColorWheel range={wheelRanges[range].gain} name="Gain" value={gain} setValue={setGain} />
-						<ColorWheel range={wheelRanges[range].offset} name="Offset" value={offset} setValue={setOffset} />
+						<ColorWheel
+							range={wheelRanges[range].offset}
+							name="Offset"
+							value={offset}
+							setValue={setOffset}
+						/>
 					</Grid>
 					<Grid container spacing={2}>
 						<Contrast value={contrast} setValue={setContrast} />

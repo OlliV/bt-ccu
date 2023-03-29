@@ -68,7 +68,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 				}
 				sendTim = null;
 				sendBufs.clear();
-			}, 4)
+			}, 4);
 		}
 	};
 
@@ -304,12 +304,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			return;
 		}
 
-		let parsed:
-			| undefined
-			| number
-			| string
-			| number[]
-			| { sensorFps: number };
+		let parsed: undefined | number | string | number[] | { sensorFps: number };
 
 		const comp = (param: [number, number], cat: number, par: number) => param[0] == cat && param[1] == par;
 		if (comp(BCSParam.Aperture, cat, par)) {
@@ -317,7 +312,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			const high = value.getUint8(9) << 8;
 			parsed = (low + high) / 2048;
 		} else if (comp(BCSParam.RecFormat, cat, par)) {
-			const sensorFps = value.getUint8(10) | value.getUint8(11) << 8;
+			const sensorFps = value.getUint8(10) | (value.getUint8(11) << 8);
 
 			parsed = { sensorFps };
 		} else if (comp(BCSParam.ManualWB, cat, par)) {
@@ -342,7 +337,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 				24;
 			parsed /= 100;
 		} else if (comp(BCSParam.ShutterSpeed, cat, par)) {
-			console.log('goddit')
+			console.log('goddit');
 			parsed =
 				(((value.getUint8(8) + value.getUint8(9)) << (8 + value.getUint8(10))) << (16 + value.getUint8(11))) <<
 				24;
