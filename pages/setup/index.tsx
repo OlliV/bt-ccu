@@ -84,6 +84,7 @@ function Camera(props: { children: any }) {
 	const [, setManualWB] = useGlobalState('res_wb');
 	const [, setGain] = useGlobalState('res_gain');
 	const [, setNdFilter] = useGlobalState('res_nd_filter');
+	//const [, setBatteryStatus] = useGlobalState('res_battery_status');
 	let [info, setInfo] = useState<InfoMessage>(pairedWithMessage(btDevice));
 
 	const unpairDevice = () => {
@@ -121,7 +122,6 @@ function Camera(props: { children: any }) {
 						'291d567a-6d75-11e6-8b77-86f30ca893d3', // Blackmagic Camera Service
 						async ({ device, server }) => {
 							try {
-								// TODO start notifications etc
 								const controller = await createBcs(server);
 								await controller.bond();
 								controller.addParamListener(BCSParam.Aperture, setAperture);
@@ -132,6 +132,7 @@ function Camera(props: { children: any }) {
 								controller.addParamListener(BCSParam.ManualWB, setManualWB);
 								controller.addParamListener(BCSParam.Gain, setGain);
 								controller.addParamListener(BCSParam.NDFilter, setNdFilter);
+								//controller.addParamListener(BCSParam.BatteryStatus, setBatteryStatus);
 								await controller.startNotifications();
 								setCameraControl(controller);
 							} catch (err) {

@@ -8,6 +8,7 @@ import { MouseEvent } from 'react';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import Notifications from './Notifications';
+//import PowerStatus from './PowerStatus';
 
 const sxArrowEnabled = {
 	'&:hover': {

@@ -376,11 +376,11 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			const flags = value.getUint8(8) | (value.getUint8(9) << 8);
 
 			parsed = {
-				batteryPresent: flags & 0x01,
-				acPresent: flags & 0x02,
-				batteryIsCharging: flags & 0x04,
-				chargeRemainingPercentageIsEstimated: flags & 0x08,
-				preferVoltageDisplay: flags & 0x10,
+				batteryPresent: !!(flags & 0x01),
+				acPresent: !!(flags & 0x02),
+				batteryIsCharging: !!(flags & 0x04),
+				chargeRemainingPercentageIsEstimated: !!(flags & 0x08),
+				preferVoltageDisplay: !!(flags & 0x10),
 			};
 		}
 

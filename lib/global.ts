@@ -21,6 +21,13 @@ export type GlobalState = {
 	res_wb: [number, number]; // temp, tint
 	res_gain: number;
 	res_nd_filter: number;
+	//res_battery_status: {
+	//	batteryPresent?: boolean;
+	//	acPresent?: boolean;
+	//	batteryIsCharging?: boolean;
+	//	chargeRemainingPercentageIsEstimated?: boolean;
+	//	preferVoltageDisplay?: boolean;
+	//};
 };
 
 const LOCAL_STORAGE_KEY = 'settings';
@@ -44,6 +51,7 @@ const initialState: GlobalState = {
 	res_wb: [5600, 10],
 	res_gain: 0,
 	res_nd_filter: 0,
+	//res_battery_status: {},
 	// Load config from local storage
 	...(typeof window === 'undefined' ? {} : JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))),
 };
