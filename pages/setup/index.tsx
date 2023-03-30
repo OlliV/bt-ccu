@@ -203,8 +203,6 @@ export default function Setup() {
 			<MyHead title="Setup" />
 			<Box>
 				<Title href="/">Setup</Title>
-				<p>Connect your camera.</p>
-
 				<Grid container direction="row" alignItems="center" spacing={2}>
 					<Camera>
 						<IconCamera sx={iconStyle} /> Camera

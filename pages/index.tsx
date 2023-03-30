@@ -15,8 +15,6 @@ export default function Home() {
 			<MyHead />
 			<Box position="relative">
 				<Title disableBack>CCU</Title>
-				<p>&nbsp;</p>
-
 				<Grid container direction="row" alignItems="center" spacing={2}>
 					<Grid item xs={9}>
 						<Grid container direction="row" spacing={2}>
