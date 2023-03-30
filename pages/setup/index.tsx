@@ -95,6 +95,7 @@ function Camera(props: { children: any }) {
 			}
 			setBtDevice(null);
 			setInfo(pairedWithMessage(null));
+			setCameraControl(null);
 			setIsPairing(false);
 		}
 	};
