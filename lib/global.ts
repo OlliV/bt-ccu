@@ -1,6 +1,8 @@
 import { createGlobalState } from 'react-hooks-global-state';
 import { BtDevice } from './ble';
 
+const defaultScene = [[0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0.5, 1], [0, 1], 'limited'];
+
 export type GlobalState = {
 	// Devices
 	btDevice_camera: null | BtDevice;
@@ -8,7 +10,7 @@ export type GlobalState = {
 	camera_control: any; // TODO Type
 	// Set values
 	aperture: number;
-	manual_wb: number;
+	manual_wb: [number, number];
 	shutter_angle: number;
 	shutter_speed: number;
 	gain: number;
@@ -28,6 +30,8 @@ export type GlobalState = {
 	//	chargeRemainingPercentageIsEstimated?: boolean;
 	//	preferVoltageDisplay?: boolean;
 	//};
+	// Settings
+	cc_scenes: { 1: typeof defaultScene; 2: typeof defaultScene; 3: typeof defaultScene; 4: typeof defaultScene };
 };
 
 const LOCAL_STORAGE_KEY = 'settings';
@@ -52,13 +56,15 @@ const initialState: GlobalState = {
 	res_gain: 0,
 	res_nd_filter: 0,
 	//res_battery_status: {},
+	// Settings
+	cc_scenes: { 1: defaultScene, 2: defaultScene, 3: defaultScene, 4: defaultScene },
 	// Load config from local storage
 	...(typeof window === 'undefined' ? {} : JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))),
 };
 
 const { useGlobalState: _useGlobalState, getGlobalState, setGlobalState } = createGlobalState(initialState);
 
-//type ConfigKey = 'gain';
+type ConfigKey = 'cc_scenes';
 
 function useGlobalState(key: keyof GlobalState) {
 	const [value, setValue] = _useGlobalState(key);
@@ -67,20 +73,20 @@ function useGlobalState(key: keyof GlobalState) {
 		setValue(value);
 
 		// Defer saving to not disturb the render loop.
-		//setTimeout(() => {
-		//	saveConfig();
-		//}, 0);
+		setTimeout(() => {
+			saveConfig();
+		}, 0);
 	};
 
 	return [value, setAndSaveValue] as const;
 }
 
-//function saveConfig() {
-//	const config: { [k in ConfigKey]: any } = {
-//		gain: getGlobalState('gain'),
-//	};
-//
-//	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config));
-//}
+function saveConfig() {
+	const config: { [k in ConfigKey]: any } = {
+		cc_scenes: getGlobalState('cc_scenes'),
+	};
+
+	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config));
+}
 
 export { useGlobalState, getGlobalState, setGlobalState /* saveConfig */ };

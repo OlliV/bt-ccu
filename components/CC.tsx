@@ -1,21 +1,31 @@
 import Avatar from '@mui/material/Avatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
+import IconLooks1 from '@mui/icons-material/LooksOne';
+import IconLooks2 from '@mui/icons-material/LooksTwo';
+import IconLooks3 from '@mui/icons-material/Looks3';
+import IconLooks4 from '@mui/icons-material/Looks4';
 import IconButton from '@mui/material/IconButton';
+import IconColor from '@mui/icons-material/ColorLens';
+import IconColorBars from '@mui/icons-material/Gradient';
+import IconRestart from '@mui/icons-material/RestartAlt';
+import IconSave from '@mui/icons-material/Save';
 import IconZoomIn from '@mui/icons-material/ZoomInMap';
 import IconZoomOut from '@mui/icons-material/ZoomOutMap';
-import IconColorBars from '@mui/icons-material/Gradient';
-import { rgbaToHsva, hsvaToRgba } from '@uiw/color-convert';
-import IconColor from '@mui/icons-material/ColorLens';
-import IconRestart from '@mui/icons-material/RestartAlt';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Wheel from '@uiw/react-color-wheel';
-import { useEffect, useState } from 'react';
-import { useGlobalState } from '../lib/global';
+import { rgbaToHsva, hsvaToRgba } from '@uiw/color-convert';
+import { Fragment, useEffect, useState } from 'react';
+import { setGlobalState, useGlobalState } from '../lib/global';
 import { Rgbl } from '../lib/ble/bcs';
+import { Tooltip } from '@mui/material';
 
 const defaults: { [key: string]: Rgbl } = {
 	lift: [0, 0, 0, 0],
@@ -172,6 +182,126 @@ function HueSat({ disabled, value, setValue }) {
 	);
 }
 
+function ScenesMenu({
+	disabled,
+	loadScene,
+	saveScene,
+}: {
+	disabled: boolean;
+	loadScene: (n: number) => void;
+	saveScene: (n: number) => void;
+}) {
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+	const handleLoad = (n: number) => {
+		setAnchorEl(null);
+		loadScene(n);
+	};
+	const handleSave = (n: number) => {
+		setAnchorEl(null);
+		saveScene(n);
+	};
+
+	return (
+		<Fragment>
+			<IconButton disabled={disabled} onClick={handleClick} size="large" aria-label="Range" color="inherit">
+				<IconSave />
+			</IconButton>
+			<Menu
+				anchorEl={anchorEl}
+				id="account-menu"
+				open={open}
+				onClose={handleClose}
+				onClick={handleClose}
+				PaperProps={{
+					elevation: 0,
+					sx: {
+						overflow: 'visible',
+						filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+						mt: 1.5,
+						'& .MuiAvatar-root': {
+							width: 32,
+							height: 32,
+							ml: -0.5,
+							mr: 1,
+						},
+						'&:before': {
+							content: '""',
+							display: 'block',
+							position: 'absolute',
+							top: 0,
+							right: 14,
+							width: 10,
+							height: 10,
+							bgcolor: 'background.paper',
+							transform: 'translateY(-50%) rotate(45deg)',
+							zIndex: 0,
+						},
+					},
+				}}
+				transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+			>
+				<MenuItem onClick={() => handleLoad(1)}>
+					<ListItemIcon>
+						<IconLooks1 />
+					</ListItemIcon>{' '}
+					Load Scene 1
+				</MenuItem>
+				<MenuItem onClick={() => handleLoad(2)}>
+					<ListItemIcon>
+						<IconLooks2 />
+					</ListItemIcon>{' '}
+					Load Scene 2
+				</MenuItem>
+				<MenuItem onClick={() => handleLoad(3)}>
+					<ListItemIcon>
+						<IconLooks3 />
+					</ListItemIcon>{' '}
+					Load Scene 3
+				</MenuItem>
+				<MenuItem onClick={() => handleLoad(4)}>
+					<ListItemIcon>
+						<IconLooks4 />
+					</ListItemIcon>{' '}
+					Load Scene 4
+				</MenuItem>
+				<Divider />
+				<MenuItem onClick={() => handleSave(1)}>
+					<ListItemIcon>
+						<IconLooks1 />
+					</ListItemIcon>{' '}
+					Save Scene 1
+				</MenuItem>
+				<MenuItem onClick={() => handleSave(2)}>
+					<ListItemIcon>
+						<IconLooks2 />
+					</ListItemIcon>{' '}
+					Save Scene 2
+				</MenuItem>
+				<MenuItem onClick={() => handleSave(3)}>
+					<ListItemIcon>
+						<IconLooks3 />
+					</ListItemIcon>{' '}
+					Save Scene 3
+				</MenuItem>
+				<MenuItem onClick={() => handleSave(4)}>
+					<ListItemIcon>
+						<IconLooks4 />
+					</ListItemIcon>{' '}
+					Save Scene 4
+				</MenuItem>
+			</Menu>
+		</Fragment>
+	);
+}
+
 export default function ColorCorrector() {
 	const [cameraControl] = useGlobalState('camera_control');
 	const [lift, setLift] = useState(defaults.lift);
@@ -182,6 +312,7 @@ export default function ColorCorrector() {
 	const [hueSat, setHueSat] = useState(defaultHueSat);
 	const [colorBars, setColorBars] = useState<boolean>(false);
 	const [range, setRange] = useState<'limited' | 'full'>('limited');
+	const [scenes, setScenes] = useGlobalState('cc_scenes');
 
 	const toggleColorBars = () => setColorBars(!colorBars);
 	const toggleRange = () => setRange(range == 'limited' ? 'full' : 'limited');
@@ -193,6 +324,22 @@ export default function ColorCorrector() {
 		setContrast(defaultContrast);
 		setHueSat(defaultHueSat);
 		cameraControl.resetCC();
+	};
+
+	const loadScene = (n: number) => {
+		const scene = scenes[n];
+		if (scene && scene.length == 7) {
+			setLift(scene[0]);
+			setGamma(scene[1]);
+			setGain(scene[2]);
+			setOffset(scene[3]);
+			setContrast(scene[4]);
+			setHueSat(scene[5]);
+			setRange(scene[6]);
+		}
+	};
+	const saveScene = (n: number) => {
+		setScenes({ ...scenes, [n]: [lift, gamma, gain, offset, contrast, hueSat, range] });
 	};
 
 	useEffect(() => {
@@ -233,35 +380,44 @@ export default function ColorCorrector() {
 					}
 					title="Color"
 					action={
-						<div>
-							<IconButton
-								disabled={!cameraControl}
-								onClick={toggleColorBars}
-								size="large"
-								aria-label="Range"
-								color="inherit"
-							>
-								<IconColorBars />
-							</IconButton>
-							<IconButton
-								disabled={!cameraControl}
-								onClick={toggleRange}
-								size="large"
-								aria-label="Range"
-								color="inherit"
-							>
-								{range == 'limited' ? <IconZoomOut /> : <IconZoomIn />}
-							</IconButton>
-							<IconButton
-								disabled={!cameraControl}
-								onClick={resetCC}
-								size="large"
-								aria-label="reset CC"
-								color="inherit"
-							>
-								<IconRestart />
-							</IconButton>
-						</div>
+						<Fragment>
+							<Tooltip title="Scenes">
+								<ScenesMenu disabled={!cameraControl} loadScene={loadScene} saveScene={saveScene} />
+							</Tooltip>
+							<Tooltip title="Color bars">
+								<IconButton
+									disabled={!cameraControl}
+									onClick={toggleColorBars}
+									size="large"
+									aria-label="Range"
+									color="inherit"
+								>
+									<IconColorBars />
+								</IconButton>
+							</Tooltip>
+							<Tooltip title="Color wheels range">
+								<IconButton
+									disabled={!cameraControl}
+									onClick={toggleRange}
+									size="large"
+									aria-label="Range"
+									color="inherit"
+								>
+									{range == 'limited' ? <IconZoomOut /> : <IconZoomIn />}
+								</IconButton>
+							</Tooltip>
+							<Tooltip title="Reset">
+								<IconButton
+									disabled={!cameraControl}
+									onClick={resetCC}
+									size="large"
+									aria-label="reset CC"
+									color="inherit"
+								>
+									<IconRestart />
+								</IconButton>
+							</Tooltip>
+						</Fragment>
 					}
 				/>
 				<CardContent>
