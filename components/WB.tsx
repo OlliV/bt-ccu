@@ -11,7 +11,7 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import { Tooltip } from '@mui/material';
 import { getGlobalState, useGlobalState } from '../lib/global';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 function valueText(value: number) {
 	return `${value} K`;
@@ -80,7 +80,7 @@ export default function WB() {
 					}
 					title="White Balance"
 					action={
-						<div>
+						<Fragment>
 							<Tooltip title="Auto WB">
 								<IconButton
 									disabled={!cameraControl}
@@ -103,7 +103,7 @@ export default function WB() {
 									<IconRestart />
 								</IconButton>
 							</Tooltip>
-						</div>
+						</Fragment>
 					}
 				/>
 				<CardContent>
