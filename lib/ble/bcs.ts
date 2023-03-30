@@ -8,16 +8,6 @@ const CAMERA_STATUS_CHARACTERISRIC = '7fe8691d-95dc-4fc5-8abd-ca74339b51b9';
 
 export type Rgbl = [number, number, number, number];
 
-const BCSDataType: { [key: string]: number } = {
-	void_t: 0,
-	int8_t: 1,
-	int16_t: 2,
-	int32_t: 3,
-	int64_t: 4,
-	str_t: 5,
-	fixed16_t: 128,
-};
-
 export const BCSParam: { [key: string]: [number, number] } = {
 	Aperture: [0, 2],
 	ApertureNorm: [0, 3],
@@ -29,6 +19,23 @@ export const BCSParam: { [key: string]: [number, number] } = {
 	Gain: [1, 13],
 	ISO: [1, 14], // Not supported by URSA Broadcast G2
 	NDFilter: [1, 16],
+	BatteryStatus: [9, 0],
+};
+
+const BCSDataType: { [key: string]: number } = {
+	void_t: 0,
+	int8_t: 1,
+	int16_t: 2,
+	int32_t: 3,
+	int64_t: 4,
+	str_t: 5,
+	fixed16_t: 128,
+};
+
+const BCSOpCode: { [key: string]: number } = {
+	assign: 0,
+	offset: 1,
+	statusUpdate: 2,
 };
 
 function toFixed16(value: number) {
@@ -309,9 +316,8 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 
 		const [id, cmd, cat, par] = [value.getUint8(0), value.getUint8(2), value.getUint8(4), value.getUint8(5)];
 
-		// cat: 9 == status
 		// cat: 12 == metadata
-		if (id != 255 || cmd != 0 || cat == 9 || cat > 11) {
+		if (id != 255 || cmd != 0 || cat > 11) {
 			return;
 		}
 		console.log(`got event: ${cat}.${par}`);
@@ -322,7 +328,7 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			return;
 		}
 
-		let parsed: undefined | number | string | number[] | { sensorFps: number; mRate: boolean };
+		let parsed: any;
 
 		const comp = (param: [number, number], cat: number, par: number) => param[0] == cat && param[1] == par;
 		if (comp(BCSParam.Aperture, cat, par) || comp(BCSParam.ApertureNorm, cat, par)) {
@@ -366,6 +372,16 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;
 			parsed = (low + high) / 2048;
+		} else if (comp(BCSParam.BatteryStatus, cat, par)) {
+			const flags = value.getUint8(8) | (value.getUint8(9) << 8);
+
+			parsed = {
+				batteryPresent: flags & 0x01,
+				acPresent: flags & 0x02,
+				batteryIsCharging: flags & 0x04,
+				chargeRemainingPercentageIsEstimated: flags & 0x08,
+				preferVoltageDisplay: flags & 0x10,
+			};
 		}
 
 		for (const cb of list) {
