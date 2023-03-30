@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 // It just oscillates between AC on and off.
 
 export default function PowerStatus() {
+	// @ts-ignore
 	const [batteryStatus] = useGlobalState('res_battery_status');
 
 	useEffect(() => {
