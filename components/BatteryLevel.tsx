@@ -68,14 +68,15 @@ function BatteryChargingIcon({ batteryLevel }: { batteryLevel: number }) {
 export function BatteryLevel({ batteryLevel, isCharging }: { batteryLevel: number; isCharging?: boolean }) {
 	return (
 		<Tooltip title={`${batteryLevel} %`} describeChild={true} enterTouchDelay={10}>
-			{isCharging ? <BatteryChargingIcon batteryLevel={batteryLevel} /> :
-			<BatteryIcon batteryLevel={batteryLevel} />}
+			{isCharging ? (
+				<BatteryChargingIcon batteryLevel={batteryLevel} />
+			) : (
+				<BatteryIcon batteryLevel={batteryLevel} />
+			)}
 		</Tooltip>
 	);
 }
 
 export function PowerAdapter() {
-	return (
-		<ElectricalServicesIcon sx={style} />
-	);
+	return <ElectricalServicesIcon sx={style} />;
 }

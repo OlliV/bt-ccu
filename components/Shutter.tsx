@@ -2,8 +2,6 @@ import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import Grid from '@mui/material/Grid';
-import IconShutterSpeed from '@mui/icons-material/ShutterSpeed';
 import Filter0Icon from '@mui/icons-material/FilterNone';
 import Filter1Icon from '@mui/icons-material/Filter1';
 import Filter2Icon from '@mui/icons-material/Filter2';
@@ -15,11 +13,13 @@ import Filter7Icon from '@mui/icons-material/Filter7';
 import Filter8Icon from '@mui/icons-material/Filter8';
 import Filter9Icon from '@mui/icons-material/Filter9';
 import Filter9PlusIcon from '@mui/icons-material/Filter9Plus';
+import Grid from '@mui/material/Grid';
+import IconShutterSpeed from '@mui/icons-material/ShutterSpeed';
 import Slider from '@mui/material/Slider';
-import { useEffect, useState } from 'react';
-import { useGlobalState } from '../lib/global';
 import { BCSParam } from '../lib/ble/bcs';
 import { IconButton } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useGlobalState } from '../lib/global';
 
 function valueText(value: number) {
 	return `${value} dB`;

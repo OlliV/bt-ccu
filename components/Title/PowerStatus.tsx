@@ -1,6 +1,6 @@
 import { BatteryLevel, PowerAdapter } from '../BatteryLevel';
 import { useGlobalState } from '../../lib/global';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
 // Unfortunately 9.0 is very unstable.
 // It just oscillates between AC on and off.
@@ -13,10 +13,10 @@ export default function PowerStatus() {
 	}, [batteryStatus]);
 
 	if (batteryStatus.acPresent && !batteryStatus.batteryIsCharging) {
-		return <PowerAdapter />
+		return <PowerAdapter />;
 	} else if (batteryStatus.batteryPresent) {
-		return <BatteryLevel batteryLevel={-1} isCharging={batteryStatus.batteryIsCharging} />
+		return <BatteryLevel batteryLevel={-1} isCharging={batteryStatus.batteryIsCharging} />;
 	} else {
-		return <BatteryLevel batteryLevel={-1} />
+		return <BatteryLevel batteryLevel={-1} />;
 	}
 }

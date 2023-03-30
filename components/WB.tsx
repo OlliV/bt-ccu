@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import IconRestart from '@mui/icons-material/RestartAlt';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
+import { Tooltip } from '@mui/material';
 import { getGlobalState, useGlobalState } from '../lib/global';
 import { useEffect, useState } from 'react';
 
@@ -80,24 +81,28 @@ export default function WB() {
 					title="White Balance"
 					action={
 						<div>
-							<IconButton
-								disabled={!cameraControl}
-								onClick={autoWB}
-								size="large"
-								aria-label="Auto WB"
-								color="inherit"
-							>
-								<IconAutoWb />
-							</IconButton>
-							<IconButton
-								disabled={!cameraControl}
-								onClick={resetWB}
-								size="large"
-								aria-label="reset CC"
-								color="inherit"
-							>
-								<IconRestart />
-							</IconButton>
+							<Tooltip title="Auto WB">
+								<IconButton
+									disabled={!cameraControl}
+									onClick={autoWB}
+									size="large"
+									aria-label="Auto WB"
+									color="inherit"
+								>
+									<IconAutoWb />
+								</IconButton>
+							</Tooltip>
+							<Tooltip title="Reset">
+								<IconButton
+									disabled={!cameraControl}
+									onClick={resetWB}
+									size="large"
+									aria-label="reset CC"
+									color="inherit"
+								>
+									<IconRestart />
+								</IconButton>
+							</Tooltip>
 						</div>
 					}
 				/>
