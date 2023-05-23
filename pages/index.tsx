@@ -8,21 +8,25 @@ import ShutterAngle from '../components/Shutter';
 import CC from '../components/CC';
 import WB from '../components/WB';
 import Aperture from '../components/Aperture';
+import Servo from '../components/Servo';
 
 export default function Home() {
+	const spacing = 2;
+
 	return (
 		<Container maxWidth="md">
 			<MyHead />
 			<Box position="relative">
 				<Title disableBack>CCU</Title>
-				<Grid container direction="row" alignItems="center" spacing={2}>
-					<Grid item xs={9}>
-						<Grid container direction="row" spacing={2}>
+				<Grid container direction="row" alignItems="center" spacing={spacing}>
+					<Grid item xs={6}>
+						<Grid container direction="row" spacing={spacing}>
 							<Gain />
 							<ShutterAngle />
 							<WB />
 						</Grid>
 					</Grid>
+					<Servo />
 					<Aperture />
 					<CC />
 				</Grid>

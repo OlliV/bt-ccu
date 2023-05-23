@@ -9,8 +9,10 @@ const CAMERA_STATUS_CHARACTERISRIC = '7fe8691d-95dc-4fc5-8abd-ca74339b51b9';
 export type Rgbl = [number, number, number, number];
 
 export const BCSParam: { [key: string]: [number, number] } = {
+	FocusNorm: [0, 0],
 	Aperture: [0, 2],
 	ApertureNorm: [0, 3],
+	ZoomNorm: [0, 8],
 	ManualWB: [1, 2],
 	AutoWB: [1, 3],
 	RecFormat: [1, 9],
@@ -90,6 +92,22 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		await cameraStatusCharacteristic.writeValue(buf);
 	};
 
+	const setFocusNorm = async (value: number) => {
+		const vfix = toFixed16(value);
+		const buf = new ArrayBuffer(12);
+		const msg = new DataView(buf);
+
+		setSendHeader(msg, 255, 0, 6);
+		msg.setUint8(4, BCSParam.FocusNorm[0]); // cat
+		msg.setUint8(5, BCSParam.FocusNorm[1]); // par
+		msg.setUint8(6, BCSDataType.fixed16); // type
+		msg.setUint8(7, 0); // op: assign
+		msg.setUint8(8, vfix & 0xff);
+		msg.setUint8(9, (vfix >> 8) & 0xff);
+
+		deferSend(buf);
+	};
+
 	const setApertureNorm = async (value: number) => {
 		const vfix = toFixed16(value);
 		const buf = new ArrayBuffer(12);
@@ -98,6 +116,22 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		setSendHeader(msg, 255, 0, 6);
 		msg.setUint8(4, BCSParam.ApertureNorm[0]); // cat
 		msg.setUint8(5, BCSParam.ApertureNorm[1]); // par
+		msg.setUint8(6, BCSDataType.fixed16); // type
+		msg.setUint8(7, 0); // op: assign
+		msg.setUint8(8, vfix & 0xff);
+		msg.setUint8(9, (vfix >> 8) & 0xff);
+
+		deferSend(buf);
+	};
+
+	const setZoomNorm = async (value: number) => {
+		const vfix = toFixed16(value);
+		const buf = new ArrayBuffer(12);
+		const msg = new DataView(buf);
+
+		setSendHeader(msg, 255, 0, 6);
+		msg.setUint8(4, BCSParam.ZoomNorm[0]); // cat
+		msg.setUint8(5, BCSParam.ZoomNorm[1]); // par
 		msg.setUint8(6, BCSDataType.fixed16); // type
 		msg.setUint8(7, 0); // op: assign
 		msg.setUint8(8, vfix & 0xff);
@@ -331,7 +365,9 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 		let parsed: any;
 
 		const comp = (param: [number, number], cat: number, par: number) => param[0] == cat && param[1] == par;
-		if (comp(BCSParam.Aperture, cat, par) || comp(BCSParam.ApertureNorm, cat, par)) {
+		const compAny = (params: [number, number][], cat: number, par: number) =>
+			params.some((v) => v[0] == cat && v[1] == par);
+		if (compAny([BCSParam.FocusNorm, BCSParam.Aperture, BCSParam.ApertureNorm, BCSParam.ZoomNorm], cat, par)) {
 			const low = value.getUint8(8);
 			const high = value.getUint8(9) << 8;
 			parsed = (low + high) / 2048;
@@ -392,7 +428,9 @@ export async function createBcs(server: BluetoothRemoteGATTServer) {
 	return {
 		bond,
 		startNotifications: () => rxCharacteristic.startNotifications(),
+		setFocusNorm,
 		setApertureNorm,
+		setZoomNorm,
 		setShutterAngle,
 		setShutterSpeed,
 		setGain,

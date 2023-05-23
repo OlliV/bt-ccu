@@ -9,14 +9,18 @@ export type GlobalState = {
 	// Control
 	camera_control: any; // TODO Type
 	// Set values
+	focus_norm: number;
 	aperture: number;
+	zoom_norm: number;
 	manual_wb: [number, number];
 	shutter_angle: number;
 	shutter_speed: number;
 	gain: number;
 	// Reported values
+	res_focus_norm: number;
 	res_aperture: number;
 	res_aperture_norm: number;
+	res_zoom_norm: number;
 	res_recording_format: { sensorFps: number; mRate: boolean };
 	res_shutter_angle: number;
 	res_shutter_speed: number;
@@ -41,14 +45,18 @@ const initialState: GlobalState = {
 	// Control
 	camera_control: null,
 	// Set values
+	focus_norm: 0,
 	aperture: 0,
+	zoom_norm: 0,
 	manual_wb: [5600, 10],
 	shutter_angle: 180,
 	shutter_speed: 50,
 	gain: 0,
 	// Reported values
+	res_focus_norm: 0,
 	res_aperture: 1,
 	res_aperture_norm: 0,
+	res_zoom_norm: 0,
 	res_recording_format: { sensorFps: NaN, mRate: false },
 	res_shutter_angle: 180,
 	res_shutter_speed: 50,

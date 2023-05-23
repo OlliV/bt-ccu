@@ -77,8 +77,10 @@ function Camera(props: { children: any }) {
 	const [btDevice, setBtDevice] = useGlobalState('btDevice_camera') as [BtDevice, (BtDevice) => void];
 	const [, setCameraControl] = useGlobalState('camera_control');
 	const [, setRecFormat] = useGlobalState('res_recording_format');
+	const [, setFocusNorm] = useGlobalState('res_focus_norm');
 	const [, setAperture] = useGlobalState('res_aperture');
 	const [, setApertureNorm] = useGlobalState('res_aperture_norm');
+	const [, setZoomNorm] = useGlobalState('res_zoom_norm');
 	const [, setShutterAngle] = useGlobalState('res_shutter_angle');
 	const [, setShutterSpeed] = useGlobalState('res_shutter_speed');
 	const [, setManualWB] = useGlobalState('res_wb');
@@ -125,8 +127,10 @@ function Camera(props: { children: any }) {
 							try {
 								const controller = await createBcs(server);
 								await controller.bond();
+								controller.addParamListener(BCSParam.FocusNorm, setFocusNorm);
 								controller.addParamListener(BCSParam.Aperture, setAperture);
 								controller.addParamListener(BCSParam.ApertureNorm, setApertureNorm);
+								controller.addParamListener(BCSParam.ZoomNorm, setZoomNorm);
 								controller.addParamListener(BCSParam.ShutterAngle, setShutterAngle);
 								controller.addParamListener(BCSParam.ShutterSpeed, setShutterSpeed);
 								controller.addParamListener(BCSParam.RecFormat, setRecFormat);
@@ -137,6 +141,7 @@ function Camera(props: { children: any }) {
 								await controller.startNotifications();
 								setCameraControl(controller);
 							} catch (err) {
+								console.error(err);
 								setInfo({ message: `${err}`, severity: 'error' });
 							}
 						},

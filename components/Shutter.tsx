@@ -178,7 +178,7 @@ export default function Shutter() {
 	}, [cameraControl]);
 
 	return (
-		<Grid item xs={4}>
+		<Grid item xs={6}>
 			<Card variant="outlined">
 				<CardHeader
 					avatar={

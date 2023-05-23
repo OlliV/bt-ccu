@@ -45,7 +45,7 @@ export default function Gain() {
 	}, [cameraControl, gain]);
 
 	return (
-		<Grid item xs={4}>
+		<Grid item xs={6}>
 			<Card variant="outlined">
 				<CardHeader
 					avatar={

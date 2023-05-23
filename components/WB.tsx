@@ -70,7 +70,7 @@ export default function WB() {
 	const newTint = (oldWb, tint) => [oldWb[0], tint];
 
 	return (
-		<Grid item xs={8}>
+		<Grid item xs={12}>
 			<Card variant="outlined">
 				<CardHeader
 					avatar={
