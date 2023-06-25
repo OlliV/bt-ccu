@@ -55,7 +55,7 @@ export default function Servo() {
 			setZoom(() => getGlobalState('res_zoom_norm'));
 		}, 1000);
 		return () => clearTimeout(tid);
-	}, [cameraControl]);
+	}, [cameraControl]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		if (cameraControl) {

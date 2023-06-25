@@ -167,7 +167,7 @@ function Camera(props: { children: any }) {
 				}
 			})();
 		}
-	}, [pairingRequest]);
+	}, [pairingRequest]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const scanDevices = () => {
 		setPairingRequest(true);

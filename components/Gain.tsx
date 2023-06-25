@@ -37,7 +37,7 @@ export default function Gain() {
 			}, 500);
 			return () => clearTimeout(tid);
 		}
-	}, [cameraControl]);
+	}, [cameraControl]); // eslint-disable-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		if (cameraControl && gain) {
 			cameraControl.setGain(gain);

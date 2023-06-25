@@ -126,7 +126,7 @@ function ColorWheel({
 
 	useEffect(() => {
 		setWheelHsv(rgbl2hsva_i(max, value));
-	}, [setWheelHsv, value]);
+	}, [setWheelHsv, max, value]);
 
 	// TODO Wide range button and cap the max normally
 	return (

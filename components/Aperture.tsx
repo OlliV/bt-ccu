@@ -44,7 +44,7 @@ export default function Aperture() {
 			setAperture(() => getGlobalState('res_aperture_norm'));
 		}, 1000);
 		return () => clearTimeout(tid);
-	}, [cameraControl]);
+	}, [cameraControl]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/*
 	 * Get f-number
