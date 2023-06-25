@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import { useGlobalState } from '../lib/global';
+import { GlobalState, useGlobalState } from '../lib/global';
 import { isValidUnsigned } from '../lib/validation';
 
 const PREFIX = 'SetupComponents';
@@ -86,9 +86,8 @@ export function UnsignedConfigParam({
 	image: string;
 	label?: string;
 	unit?: string;
-	configName: string;
+	configName: keyof GlobalState;
 }) {
-	// @ts-ignore
 	const [value, setValue] = useGlobalState(configName);
 	const [tmp, setTmp] = useState(value);
 
@@ -135,9 +134,8 @@ export function EnumConfigParam({
 	label?: string;
 	helpLabel?: string;
 	items: [string, string][];
-	configName: string;
+	configName: keyof GlobalState;
 }) {
-	// @ts-ignore
 	const [value, setValue] = useGlobalState(configName);
 	const handleChange = (event: SelectChangeEvent<string>) => setValue(event.target.value);
 
