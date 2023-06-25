@@ -5,7 +5,6 @@ import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import { useEffect } from 'react';
 
 export const cache = createCache({
   key: 'css',
@@ -31,14 +30,6 @@ const theme = createTheme({
 });
 
 function App({ Component, pageProps }) {
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
   return (
     <CacheProvider value={cache}>
 		<ThemeProvider theme={theme}>
