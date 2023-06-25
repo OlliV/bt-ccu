@@ -82,26 +82,30 @@ export default function WB() {
 					action={
 						<Fragment>
 							<Tooltip title="Auto WB">
-								<IconButton
-									disabled={!cameraControl}
-									onClick={autoWB}
-									size="large"
-									aria-label="Auto WB"
-									color="inherit"
-								>
-									<IconAutoWb />
-								</IconButton>
+								<span>
+									<IconButton
+										disabled={!cameraControl}
+										onClick={autoWB}
+										size="large"
+										aria-label="Auto WB"
+										color="inherit"
+									>
+										<IconAutoWb />
+									</IconButton>
+								</span>
 							</Tooltip>
 							<Tooltip title="Reset">
-								<IconButton
-									disabled={!cameraControl}
-									onClick={resetWB}
-									size="large"
-									aria-label="reset CC"
-									color="inherit"
-								>
-									<IconRestart />
-								</IconButton>
+								<span>
+									<IconButton
+										disabled={!cameraControl}
+										onClick={resetWB}
+										size="large"
+										aria-label="reset CC"
+										color="inherit"
+									>
+										<IconRestart />
+									</IconButton>
+								</span>
 							</Tooltip>
 						</Fragment>
 					}

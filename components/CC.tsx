@@ -382,40 +382,48 @@ export default function ColorCorrector() {
 					action={
 						<Fragment>
 							<Tooltip title="Scenes">
-								<ScenesMenu disabled={!cameraControl} loadScene={loadScene} saveScene={saveScene} />
+								<span>
+									<ScenesMenu disabled={!cameraControl} loadScene={loadScene} saveScene={saveScene} />
+								</span>
 							</Tooltip>
 							<Tooltip title="Color bars">
-								<IconButton
-									disabled={!cameraControl}
-									onClick={toggleColorBars}
-									size="large"
-									aria-label="Range"
-									color="inherit"
-								>
-									<IconColorBars />
-								</IconButton>
+								<span>
+									<IconButton
+										disabled={!cameraControl}
+										onClick={toggleColorBars}
+										size="large"
+										aria-label="Range"
+										color="inherit"
+									>
+										<IconColorBars />
+									</IconButton>
+								</span>
 							</Tooltip>
 							<Tooltip title="Color wheels range">
-								<IconButton
-									disabled={!cameraControl}
-									onClick={toggleRange}
-									size="large"
-									aria-label="Range"
-									color="inherit"
-								>
-									{range == 'limited' ? <IconZoomOut /> : <IconZoomIn />}
-								</IconButton>
+								<span>
+									<IconButton
+										disabled={!cameraControl}
+										onClick={toggleRange}
+										size="large"
+										aria-label="Range"
+										color="inherit"
+									>
+										{range == 'limited' ? <IconZoomOut /> : <IconZoomIn />}
+									</IconButton>
+								</span>
 							</Tooltip>
 							<Tooltip title="Reset">
-								<IconButton
-									disabled={!cameraControl}
-									onClick={resetCC}
-									size="large"
-									aria-label="reset CC"
-									color="inherit"
-								>
-									<IconRestart />
-								</IconButton>
+								<span>
+									<IconButton
+										disabled={!cameraControl}
+										onClick={resetCC}
+										size="large"
+										aria-label="reset CC"
+										color="inherit"
+									>
+										<IconRestart />
+									</IconButton>
+								</span>
 							</Tooltip>
 						</Fragment>
 					}
